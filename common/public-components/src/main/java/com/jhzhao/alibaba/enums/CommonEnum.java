@@ -5,42 +5,21 @@ import com.jhzhao.alibaba.exceptins.BaseErrorInfoInterface;
 
 /**
  * @Classname CommonEnum
- * @Description TODO
+ * @Description 定义枚举类，用户后端请求的返回标识
  * @Date 2025/11/8 10:58 上午
  * @Created by zhaojh0912
  */
 public enum CommonEnum implements BaseErrorInfoInterface {
-    /**
-     * 成功
-     */
-    SUCCESS(200, "操作成功"),
 
     /**
-     * 系统错误
+     * 仅作为参考
+     * 100 这类的: 请求的相关 以及参数验证的 不涉及业务逻辑的
+     * 200 这类的: 成功响应的 以及包含非业务逻辑报错的
+     * 300 这类的:
+     * 400 这类的:  权限相关的 以及资源类的
+     * 500 这类的:  服务端接口报错
+     * 1000+ 这类的:  用于以后自定义的 也许以后审计类的能用到
      */
-    ERROR(500, "系统错误"),
-
-    /**
-     * 系统错误：新增操作错误
-     */
-    ERROR_INSERT(501, "系统错误:新增操作错误！"),
-
-    /**
-     * 系统错误：删除错误
-     */
-    ERROR_DELETED(502, "系统错误:删除操作错误！"),
-
-
-    /**
-     * 系统错误：更新操作错误
-     */
-    ERROR_UPDATE(500, "系统错误:更新操作错误！"),
-
-    /**
-     * 系统错误：查询操作错误
-     */
-    ERROR_SELECT(500, "系统错误:查询操作错误！"),
-
 
     /**
      * 操作失败
@@ -86,6 +65,11 @@ public enum CommonEnum implements BaseErrorInfoInterface {
     ARITHMETIC_EXCEPTION(109, "算数异常"),
 
     /**
+     * 成功
+     */
+    SUCCESS(200, "操作成功"),
+
+    /**
      * 验证码错误
      */
     INVALID_VCODE(204, "验证码错误"),
@@ -129,6 +113,31 @@ public enum CommonEnum implements BaseErrorInfoInterface {
      * 没有权限
      */
     NO_PERMISSION(403, "当前用户无该接口权限"),
+
+    /**
+     * 系统错误
+     */
+    ERROR(500, "系统错误"),
+
+    /**
+     * 系统错误：新增操作错误
+     */
+    ERROR_INSERT(501, "系统错误:新增操作错误！"),
+
+    /**
+     * 系统错误：删除错误
+     */
+    ERROR_DELETED(502, "系统错误:删除操作错误！"),
+
+    /**
+     * 系统错误：更新操作错误
+     */
+    ERROR_UPDATE(504, "系统错误:更新操作错误！"),
+
+    /**
+     * 系统错误：查询操作错误
+     */
+    ERROR_SELECT(505, "系统错误:查询操作错误！"),
 
 
     CUSTOM_EXCEPTION(1001,"用户自定义的异常");

@@ -1,0 +1,28 @@
+server:
+  port: 9000
+  servlet:
+    context-path: /auth
+spring:
+  application:
+    name: auth-center
+  datasource:
+    url: jdbc:mysql://172.16.75.105:3306/auth_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: abcd@123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 172.16.75.105:8848
+  data:
+    redis:
+      host: 172.16.75.105
+      port: 6379
+      database: 0
+      password: abcd@123456
+
+# JWT 配置
+jwt:
+  secret: your-256-bit-secret-key-here-must-32-bytes!!
+  access-token-expire: 7200    # 2小时（秒）
+  refresh-token-expire: 8600   # 2个半小时
