@@ -31,6 +31,7 @@
         <!--一下是业务相关的依赖-->
         <lombok-version>1.18.42</lombok-version>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+        <knife4j-openapi3-version>4.5.0</knife4j-openapi3-version>
 
     </properties>
 
@@ -63,15 +64,25 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok-version}</version> <!-- 推荐用这个，支持 JDK17+ -->
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+                <version>${knife4j-openapi3-version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!--验证框架-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
+
 
         <!--lombok-->
         <dependency>
@@ -92,24 +103,32 @@
 
     <!-- 2. Spring Boot 插件：智能跳过无启动类的模块（如 api、common、public-components） -->
     <build>
-        <plugins>
-            <!-- 只有真正的 Boot 应用才执行 repackage，common 模块会自动跳过 -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <configuration>
-                    <skip>${spring-boot.repackage.skip}</skip>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.1</version>
+                    <configuration>
+                        <source>25</source>
+                        <target>25</target>
+                        <encoding>UTF-8</encoding>
+                        <!-- 关键：自动启用 lombok -->
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok-version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+                        <!-- Spring Boot 3.5+ maven官网文档里 推荐加上 compilerArgs -->
+                        <compilerArgs>
+                            <arg>-parameters</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>
