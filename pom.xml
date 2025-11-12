@@ -28,7 +28,10 @@
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <spring-cloud-alibaba.version>2025.0.0.0</spring-cloud-alibaba.version>
 
+        <!--一下是业务相关的依赖-->
         <lombok-version>1.18.42</lombok-version>
+        <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+
     </properties>
 
     <!-- 统一版本管理（顺序不能错！） -->
@@ -87,37 +90,22 @@
 
     </dependencies>
 
+    <!-- 2. Spring Boot 插件：智能跳过无启动类的模块（如 api、common、public-components） -->
     <build>
         <plugins>
-            <!-- 1. JDK 25 编译插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
-                <configuration>
-                    <release>25</release>
-                </configuration>
-            </plugin>
-
-            <!-- 2. Spring Boot 插件：智能跳过无启动类的模块（如 api、common、public-components） -->
+            <!-- 只有真正的 Boot 应用才执行 repackage，common 模块会自动跳过 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>${start-class}</mainClass>
-                    <!-- 关键：使用 Maven 官方标准写法，IDEA 完全不飘红 -->
-                    <skip>${start-class == null || start-class == ''}</skip>
+                    <skip>${spring-boot.repackage.skip}</skip>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>repackage</id>
                         <goals>
                             <goal>repackage</goal>
                         </goals>
-                        <configuration>
-                            <skip>${start-class == null || start-class == ''}</skip>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
