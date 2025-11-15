@@ -1,6 +1,5 @@
 package com.jhzhao.alibaba.service;
 
-import com.jhzhao.alibaba.service.impl.LoginResponse;
 
 /**
  * Author zhaojh0912
@@ -9,5 +8,6 @@ import com.jhzhao.alibaba.service.impl.LoginResponse;
  * Version 1.0
  */
 public interface AuthService {
-    LoginResponse login(String username, String password);
+
+    void login(String username, String password);
 }

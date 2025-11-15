@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 /**
  * Author zhaojh0912
@@ -40,7 +43,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .map(ur -> roleRepository.findById(ur.getRoleId()))
                 .filter(Optional::isPresent)
                 .map(r -> "ROLE_" + r.get().getRoleCode())
-                .toList();
+                .collect(Collectors.toList());
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())

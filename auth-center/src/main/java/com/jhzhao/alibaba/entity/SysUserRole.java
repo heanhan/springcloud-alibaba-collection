@@ -1,6 +1,8 @@
 package com.jhzhao.alibaba.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -13,7 +15,12 @@ import java.io.Serializable;
 //@IdClass(UserRoleId.class)
 @Data
 public class SysUserRole implements Serializable {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+
     private Long userId;
 
     @Id

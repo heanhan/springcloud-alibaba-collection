@@ -14,7 +14,9 @@ import java.io.Serializable;
 @Table(name = "sys_menu")
 @Data
 public class SysMenu implements Serializable {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String permission;

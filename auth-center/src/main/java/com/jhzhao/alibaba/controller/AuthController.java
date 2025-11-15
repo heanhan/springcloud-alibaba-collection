@@ -1,9 +1,9 @@
 package com.jhzhao.alibaba.controller;
 
+import com.jhzhao.alibaba.result.ResultBody;
 import com.jhzhao.alibaba.service.AuthService;
-import com.jhzhao.alibaba.service.impl.LoginResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Data;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
@@ -27,22 +27,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public R<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
-        LoginResponse resp = authService.login(request.getUsername(), request.getPassword());
-        return R.ok(resp);
+    public ResultBody login(@RequestBody @Valid String name) {
+//        LoginResponse resp = authService.login(request.getUsername(), request.getPassword());
+        return ResultBody.success();
     }
 
     @PostMapping("/logout")
-    public R<String> logout(HttpServletRequest request) {
+    public ResultBody logout(HttpServletRequest request) {
         SecurityContextHolder.clearContext();
-        return R.ok("登出成功");
+        return ResultBody.success();
     }
-}
-
-@Data
-class LoginRequest {
-    @NotBlank
-    private String username;
-    @NotBlank
-    private String password;
 }

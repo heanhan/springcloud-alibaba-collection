@@ -1,6 +1,7 @@
 package com.jhzhao.alibaba.config;
 
 import com.jhzhao.alibaba.security.JwtAuthenticationFilter;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,9 +25,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Resource
+    private  JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final UserDetailsService userDetailsService;
+    @Resource
+    private  UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
