@@ -1,64 +1,58 @@
 package com.jhzhao.alibaba.config;
 
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import com.jhzhao.alibaba.properties.RedisProperties;
+import com.jhzhao.alibaba.utils.RedisUtil;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * redis的序列化工具
+ */
 @Configuration
+@ConditionalOnClass(RedisTemplate.class)
+@AutoConfigureAfter(RedisAutoConfiguration.class)
+@EnableConfigurationProperties(RedisProperties.class)
+@ConditionalOnProperty(prefix = "spring.data.redis.fastjson", name = "enable", havingValue = "true", matchIfMissing = true)
 public class RedisTemplateConfig {
 
+    /**
+     * 自动注入 Spring Boot 已创建好的 RedisConnectionFactory
+     * 它会根据配置自动识别：单机 / 哨兵 / 集群
+     */
     @Bean
-    @ConditionalOnMissingBean(name = "redisTemplate")
-
+    @ConditionalOnBean(RedisConnectionFactory.class)
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
-        // 默认的 RedisTemplate 没有过多的设置，redis 对象都是需要序列化！
-        // 两个泛型都是 Object, Object 的类型，我们后使用需要强制转换 <String, Object>
-        // 我们为了自己开发方便，一般直接使用 <String, Object>
-        RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
 
-        // Json序列化配置
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
-        ObjectMapper objectMapper=new ObjectMapper();
-        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
-//        fastJsonRedisSerializer.setObjectMapper(objectMapper);
+        // Key: String
+        StringRedisSerializer stringSerializer = new StringRedisSerializer();
+        template.setKeySerializer(stringSerializer);
+        template.setHashKeySerializer(stringSerializer);
 
-//        ObjectMapper om = new ObjectMapper();
-//        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-//        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-//        fastJsonRedisSerializer.setObjectMapper(om);
-        // String 的序列化
-        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        // key采用String的序列化方式
-        template.setKeySerializer(stringRedisSerializer);
-        // hash的key也采用String的序列化方式
-        template.setHashKeySerializer(stringRedisSerializer);
-        // value序列化方式采用jackson
-        template.setValueSerializer(fastJsonRedisSerializer);
-        // hash的value序列化方式采用jackson
-        template.setHashValueSerializer(fastJsonRedisSerializer);
+        // Value: FastJSON2
+        FastJson2JsonRedisSerializer<Object> fastJsonSerializer = new FastJson2JsonRedisSerializer<>(Object.class);
+        template.setValueSerializer(fastJsonSerializer);
+        template.setHashValueSerializer(fastJsonSerializer);
+
+        // 默认序列化器也设置为 FastJSON2
+        template.setDefaultSerializer(fastJsonSerializer);
+
         template.afterPropertiesSet();
         return template;
-
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    // 由于 String 是redis中最常使用的类型，所以说单独提出来了一个bean！
-    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        StringRedisTemplate template = new StringRedisTemplate();
-        template.setConnectionFactory(redisConnectionFactory);
-        return template;
+    public RedisUtil redisUtil(RedisTemplate<String, Object> redisTemplate) {
+        return new RedisUtil(redisTemplate);
     }
 }

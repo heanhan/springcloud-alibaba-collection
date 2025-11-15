@@ -1,28 +1,40 @@
 server:
-  port: 9000
-  servlet:
-    context-path: /auth
+  port: 8083
+
 spring:
   application:
     name: auth-center
   datasource:
-    url: jdbc:mysql://172.16.75.105:3306/auth_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://172.16.75.105:3306/auth_db?useSSL=false&serverTimezone=Asia/Hong_Kong&allowPublicKeyRetrieval=true
     username: root
     password: abcd@123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      database: 0
+      host: 172.16.75.105
+      port: 6379
+      password: abcd@123456
+
+  # JWT
+jwt:
+  secret: ${JWT_SECRET:your-256-bit-secret-change-in-production}
+  expiration: 86400000  # 24小时
+
+  # Nacos
   cloud:
     nacos:
       discovery:
-        server-addr: 172.16.75.105:8848
-  data:
-    redis:
-      host: 172.16.75.105
-      port: 6379
-      database: 0
-      password: abcd@123456
-
-# JWT 配置
-jwt:
-  secret: your-256-bit-secret-key-here-must-32-bytes!!
-  access-token-expire: 7200    # 2小时（秒）
-  refresh-token-expire: 8600   # 2个半小时
+        server-addr: 172.16.75.107:8848
+        namespace: dev
+      config:
+        server-addr: 172.16.75.107:8848
+        namespace: dev
+        file-extension: yaml
