@@ -4,6 +4,7 @@ import com.jhzhao.alibaba.entity.SysRoleMenu;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Author zhaojh0912
@@ -12,5 +13,5 @@ import java.util.List;
  * Version 1.0
  */
 public interface SysRoleMenuRepository extends JpaRepository<SysRoleMenu, Long> {
-    List<SysRoleMenu> findByRoleId(Long roleId);
+    List<SysRoleMenu> findByRoleIds(Set<Long> roleIds);
 }

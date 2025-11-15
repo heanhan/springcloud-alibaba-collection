@@ -29,12 +29,15 @@ jwt:
   expiration: 86400000  # 24小时
 
   # Nacos
+
   cloud:
     nacos:
       discovery:
         server-addr: 172.16.75.107:8848
         namespace: dev
       config:
+        import-check:
+          enabled: false
         server-addr: 172.16.75.107:8848
         namespace: dev
         file-extension: yaml

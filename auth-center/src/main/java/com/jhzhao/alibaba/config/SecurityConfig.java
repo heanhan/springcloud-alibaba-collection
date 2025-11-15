@@ -28,8 +28,6 @@ public class SecurityConfig {
     @Resource
     private  JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Resource
-    private  UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -57,11 +55,21 @@ public class SecurityConfig {
         return converter;
     }
 
+    /**
+     * 密码加密器
+     * @return
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * 认证管理器
+     * @param config
+     * @return
+     * @throws Exception
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
