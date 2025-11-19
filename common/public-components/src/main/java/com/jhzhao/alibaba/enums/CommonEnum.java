@@ -70,6 +70,16 @@ public enum CommonEnum implements BaseErrorInfoInterface {
     SUCCESS(200, "操作成功"),
 
     /**
+     * 退出成功
+     */
+    LOGOUT_SUCCESS(201, "退出成功"),
+
+    /**
+     * 登录失败
+     */
+    LOGIN_FAILED(202, "登录失败"),
+
+    /**
      * 验证码错误
      */
     INVALID_VCODE(204, "验证码错误"),
@@ -108,6 +118,11 @@ public enum CommonEnum implements BaseErrorInfoInterface {
      * 角色不存在
      */
     ROLE_USED(211, "角色使用中，不可删除"),
+
+    /**
+     * 禁止无权限
+     */
+    FORBIDDEN(401, "无权限"),
 
     /**
      * 没有权限

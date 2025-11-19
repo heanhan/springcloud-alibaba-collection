@@ -1,6 +1,6 @@
 package com.jhzhao.alibaba.annotation;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.annotation.Resource;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,10 +11,10 @@ import java.util.concurrent.TimeUnit;
 
 @Aspect
 @Component
-@RequiredArgsConstructor
 public class PreventRepeatAspect {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Around("@annotation(preventRepeat)")
     public Object around(ProceedingJoinPoint pjp, PreventRepeat preventRepeat) throws Throwable {

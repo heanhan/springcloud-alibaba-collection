@@ -1,5 +1,6 @@
 package com.jhzhao.alibaba.utils;
 
+import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisUtil {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     public RedisUtil(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;

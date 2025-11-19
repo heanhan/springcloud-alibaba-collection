@@ -12,7 +12,6 @@ import java.io.Serializable;
 // 中间表
 @Entity
 @Table(name = "sys_user_role")
-//@IdClass(UserRoleId.class)
 @Data
 public class SysUserRole implements Serializable {
 
@@ -23,6 +22,5 @@ public class SysUserRole implements Serializable {
 
     private Long userId;
 
-    @Id
     private Long roleId;
 }

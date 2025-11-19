@@ -1,6 +1,6 @@
 package com.jhzhao.alibaba.lock;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.annotation.Resource;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
@@ -9,10 +9,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 @Component
-@RequiredArgsConstructor
 public class DistributedLock {
 
-    private final RedissonClient redissonClient;
+    @Resource
+    private RedissonClient redissonClient;
 
     public <T> T lock(String lockKey, long waitTime, long leaseTime, TimeUnit unit, Supplier<T> supplier) {
         RLock lock = redissonClient.getLock(lockKey);

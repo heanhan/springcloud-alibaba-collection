@@ -1,97 +1,80 @@
 package com.jhzhao.alibaba.controller;
 
-import com.jhzhao.alibaba.model.dto.LoginResponse;
-import com.jhzhao.alibaba.model.dto.RefreshResponse;
-import com.jhzhao.alibaba.result.ResultBody;
-import com.jhzhao.alibaba.security.JwtTokenProvider;
+import com.jhzhao.alibaba.enums.CommonEnum;
 import com.jhzhao.alibaba.model.vo.LoginUserVO;
-import com.jhzhao.alibaba.service.AuthService;
+import com.jhzhao.alibaba.result.ResultBody;
+import com.jhzhao.alibaba.security.TokenService;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor
-@Slf4j
 public class AuthController {
 
     @Resource
-    private AuthService authService;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
-    private JwtTokenProvider jwtTokenProvider;
+    private AuthenticationManager authenticationManager;
 
-    // ==================== 1. 登录接口 ====================
+    @Resource
+    private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResultBody<LoginResponse> login(@RequestBody @Valid LoginUserVO loginUser) {
-        log.info("用户登录请求: username={}", loginUser.getUsername());
-
+    public ResultBody login(@RequestBody LoginUserVO loginUserVO) {
         try {
-            LoginResponse response = authService.login(loginUser.getUsername(), loginUser.getPassword());
-            log.info("登录成功: userId={}", response.getUserId());
-            return ResultBody.success(response);
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUserVO.getUsername(), loginUserVO.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // 生成token
+            Map<String, String> tokens = tokenService.generateToken(loginUserVO.getUsername());
+            Map<String, Object> result = new HashMap<>();
+            result.put("access_token", tokens.get("access_token"));
+            result.put("refresh_token", tokens.get("refresh_token"));
+
+            return ResultBody.success(result);
         } catch (Exception e) {
-            log.warn("登录失败: {}", e.getMessage());
-            return ResultBody.error(401, e.getMessage());
+            return ResultBody.error(CommonEnum.INVALID_USERNAME_PASSWORD);
         }
     }
-
-    // ==================== 2. 刷新 Token 接口 ====================
-
-    @PostMapping("/refresh")
-    public ResultBody<RefreshResponse> refresh(HttpServletRequest request) {
-        String oldToken = extractToken(request);
-        if (oldToken == null) {
-            return ResultBody.error(401, "未提供 Token");
-        }
-        try {
-            String newToken = jwtTokenProvider.refreshToken(oldToken);
-            RefreshResponse resp = new RefreshResponse(newToken,86400000);
-            log.info("Token 刷新成功");
-            return ResultBody.success(resp);
-        } catch (Exception e) {
-            log.warn("Token 刷新失败: {}", e.getMessage());
-            return ResultBody.error(401, "无效或已过期的 Token");
-        }
-    }
-
-    // ==================== 3. 退出登录接口 ====================
 
     @PostMapping("/logout")
-    public ResultBody<String> logout(HttpServletRequest request) {
-        String token = extractToken(request);
-        if (token != null) {
-            try {
-                Long userId = jwtTokenProvider.getUserId(token);
-                authService.clearPermissionCache(userId);
-                log.info("用户登出: userId={}", userId);
-            } catch (Exception e) {
-                log.warn("登出时解析 Token 失败: {}", e.getMessage());
-            }
-        }
-
-        // 清除 Spring Security 上下文
-        org.springframework.security.core.context.SecurityContextHolder.clearContext();
-
-        return ResultBody.success("登出成功");
+    public ResultBody logout() {
+        // 退出时清除token，这里我们只是返回成功
+        return ResultBody.success("退出成功");
     }
 
-    // ==================== 工具方法 ====================
-
-    private String extractToken(HttpServletRequest request) {
-        String bearer = request.getHeader("Authorization");
-        if (bearer != null && bearer.startsWith("Bearer ")) {
-            return bearer.substring(7);
+    @PostMapping("/refresh")
+    public ResultBody refresh(@RequestParam String refreshToken) {
+        // 验证refresh token
+        if (!tokenService.validateRefreshToken(refreshToken)) {
+            return ResultBody.error("刷新token无效");
         }
-        return null;
+
+        String username = tokenService.getUsernameFromToken(refreshToken);
+
+        // 生成新的access token
+        String newAccessToken = tokenService.generateRefreshToken(username);
+
+        // 更新Redis中的access token
+        redisTemplate.opsForValue().set("auth:access_token:" + username, newAccessToken, tokenService.getAccessTokenExpiration(), TimeUnit.MILLISECONDS);
+
+        Map<String, String> result = new HashMap<>();
+        result.put("access_token", newAccessToken);
+
+        return ResultBody.success(result);
     }
 }

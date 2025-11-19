@@ -1,7 +1,7 @@
 package com.jhzhao.alibaba.aspect;
 
 import com.jhzhao.alibaba.annotation.RateLimit;
-import lombok.RequiredArgsConstructor;
+import jakarta.annotation.Resource;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,10 +13,10 @@ import java.util.Collections;
 
 @Aspect
 @Component
-@RequiredArgsConstructor
 public class RateLimitAspect {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     private static final String LUA_SCRIPT = """
         local key = KEYS[1]

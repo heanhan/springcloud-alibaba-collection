@@ -11,7 +11,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "sys_role_menu")
-//@IdClass(RoleMenuId.class)
 @Data
 public class SysRoleMenu implements Serializable {
 

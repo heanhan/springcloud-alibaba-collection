@@ -9,6 +9,18 @@ spring:
     username: root
     password: abcd@123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 50
+      min-idle: 50
+      max-active: 300
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
   jpa:
     hibernate:
       ddl-auto: update
@@ -23,9 +35,9 @@ spring:
       port: 6379
       password: abcd@123456
 
-  # JWT
+# JWT
 jwt:
-  secret: ${JWT_SECRET:your-256-bit-secret-change-in-production}
+  secret: springcloud-alibaba-collection-auth-center
   expiration: 86400000  # 24小时
 
   # Nacos
