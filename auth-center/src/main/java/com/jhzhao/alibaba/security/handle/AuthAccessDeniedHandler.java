@@ -13,8 +13,11 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * 用户登录后，权限不足的 处理器
+ */
 @Component
-public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+public class AuthAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {

@@ -22,3 +22,8 @@ spring:
 
       discovery:
         group: DEFAULT_GROUP
+jwt:
+  secret: replace-with-strong-secret-32chars-minimum
+  issuer: auth-center
+  access-token-expire-seconds: 7200
+  refresh-token-expire-seconds: 86400

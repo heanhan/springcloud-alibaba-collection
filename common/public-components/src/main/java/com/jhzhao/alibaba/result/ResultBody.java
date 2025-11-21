@@ -98,17 +98,6 @@ public class ResultBody<T> {
     /**
      * 失败
      */
-    public static <T> ResultBody<T> error(BaseErrorInfoInterface errorInfo) {
-        ResultBody rb = new ResultBody();
-        rb.setCode(errorInfo.getResultCode());
-        rb.setMessage(errorInfo.getResultMsg());
-        rb.setResult(null);
-        return rb;
-    }
-
-    /**
-     * 失败
-     */
     public static <T> ResultBody<T> error(CommonEnum commonEnum) {
         ResultBody rb = new ResultBody();
         rb.setCode(commonEnum.getResultCode());

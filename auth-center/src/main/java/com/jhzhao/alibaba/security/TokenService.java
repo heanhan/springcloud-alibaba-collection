@@ -2,12 +2,13 @@ package com.jhzhao.alibaba.security;
 
 
 import com.jhzhao.alibaba.repository.SysUserRepository;
+import com.jhzhao.alibaba.utils.RedisUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -19,17 +20,26 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class TokenService {
 
+    /**
+     * access_token 的有效期
+     */
     @Value("${jwt.access-token-expiration:7200}")
     private Long accessTokenExpiration;
 
+    /**
+     * refresh_token 的刷新token 时间有效期
+     */
     @Value("${jwt.refresh-token-expiration:8640000}")
     private Long refreshTokenExpiration;
 
+    /**
+     * 盐
+     */
     @Value("${jwt.secret-key:auth-center}")
     private String secretKey;
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private RedisUtil redisUtil;
 
     @Autowired
     private SysUserRepository userRepository;
@@ -45,27 +55,33 @@ public class TokenService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    /**
+     * 生成token
+     * @param username  用户名
+     * @return
+     */
     public Map<String, String> generateToken(String username) {
         // 生成access token
         String accessToken = generateAccessToken(username);
         // 生成refresh token
         String refreshToken = generateRefreshToken(username);
-
         // 将token存入Redis，设置过期时间
-        redisTemplate.opsForValue().set("auth:access_token:" + username, accessToken, accessTokenExpiration, TimeUnit.MILLISECONDS);
-        redisTemplate.opsForValue().set("auth:refresh_token:" + username, refreshToken, refreshTokenExpiration, TimeUnit.MILLISECONDS);
-
+        redisUtil.set("auth:access_token:" + username, accessToken, accessTokenExpiration, TimeUnit.MILLISECONDS);
+        redisUtil.set("auth:refresh_token:" + username, refreshToken, refreshTokenExpiration, TimeUnit.MILLISECONDS);
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("access_token", accessToken);
         tokenMap.put("refresh_token", refreshToken);
-
         return tokenMap;
     }
 
+    /**
+     * 根据yonghyongh
+     * @param username
+     * @return
+     */
     private String generateAccessToken(String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpiration);
-
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(now)
@@ -77,7 +93,6 @@ public class TokenService {
     public String generateRefreshToken(String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpiration);
-
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(now)
@@ -141,6 +156,12 @@ public class TokenService {
         }
     }
 
+    /**
+     * yonghu
+     * @param token
+     * @param username
+     * @return
+     */
     public boolean isTokenValid(String token, String username) {
         try {
             String tokenUsername = getUsernameFromToken(token);
