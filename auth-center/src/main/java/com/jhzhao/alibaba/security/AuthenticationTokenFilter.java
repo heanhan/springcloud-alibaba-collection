@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,8 +16,6 @@ import java.util.List;
 @Slf4j
 @Component
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
-
-    private UserDetailsService userDetailsService;
 
     // 忽略的URL列表
     private List<String> ignoreUrls;
