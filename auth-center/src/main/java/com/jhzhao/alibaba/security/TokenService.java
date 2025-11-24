@@ -1,13 +1,11 @@
 package com.jhzhao.alibaba.security;
 
 
-import com.jhzhao.alibaba.repository.SysUserRepository;
 import com.jhzhao.alibaba.utils.RedisUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +38,6 @@ public class TokenService {
 
     @Resource
     private RedisUtil redisUtil;
-
-    @Autowired
-    private SysUserRepository userRepository;
 
     private SecretKey getSigningKey() {
         // 确保密钥长度足够（至少32字节用于HS256）
@@ -79,7 +74,7 @@ public class TokenService {
      * @param username
      * @return
      */
-    private String generateAccessToken(String username) {
+    public String generateAccessToken(String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpiration);
         return Jwts.builder()

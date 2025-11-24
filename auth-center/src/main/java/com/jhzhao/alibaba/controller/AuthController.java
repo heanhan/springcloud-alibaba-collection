@@ -1,31 +1,30 @@
 package com.jhzhao.alibaba.controller;
 
-import com.jhzhao.alibaba.enums.CommonEnum;
 import com.jhzhao.alibaba.model.vo.LoginUserVO;
 import com.jhzhao.alibaba.result.ResultBody;
 import com.jhzhao.alibaba.security.TokenService;
+import com.jhzhao.alibaba.utils.RedisUtil;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisUtil redisUtil;
 
     @Resource
     private AuthenticationManager authenticationManager;
@@ -33,48 +32,77 @@ public class AuthController {
     @Resource
     private TokenService tokenService;
 
-    @PostMapping("/login")
-    public ResultBody login(@RequestBody LoginUserVO loginUserVO) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUserVO.getUsername(), loginUserVO.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+    @RestController
+    @RequestMapping("/auth")
+    @RequiredArgsConstructor
+    public class AuthController {
 
-            // 生成token
-            Map<String, String> tokens = tokenService.generateToken(loginUserVO.getUsername());
-            Map<String, Object> result = new HashMap<>();
-            result.put("access_token", tokens.get("access_token"));
-            result.put("refresh_token", tokens.get("refresh_token"));
+        @Resource
+        private AuthenticationManager authManager;
 
-            return ResultBody.success(result);
-        } catch (Exception e) {
-            return ResultBody.error(CommonEnum.INVALID_USERNAME_PASSWORD);
+        @Resource
+        private TokenService tokenService;
+
+        @Resource
+        private TokenCache tokenCache;
+
+        @PostMapping("/login")
+        public ResultBody<Map<String, String>> login(@RequestBody LoginUserVO dto) {
+            try {
+                Authentication auth = authManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
+                );
+
+                String username = auth.getName();
+                String accessToken = tokenService.generateAccessToken(username);
+                String refreshToken = tokenService.generateRefreshToken(username);
+
+                tokenCache.saveAccess(username, accessToken, 7200);
+                tokenCache.saveRefresh(username, refreshToken, 86400);
+
+                return ResultBody.success(Map.of(
+                        "access_token", accessToken,
+                        "refresh_token", refreshToken
+                ));
+            } catch (BadCredentialsException e) {
+                return ResultBody.error("用户名或密码错误");
+            }
         }
-    }
 
-    @PostMapping("/logout")
-    public ResultBody logout() {
-        // 退出时清除token，这里我们只是返回成功
-        return ResultBody.success("退出成功");
-    }
-
-    @PostMapping("/refresh")
-    public ResultBody refresh(@RequestParam String refreshToken) {
-        // 验证refresh token
-        if (!tokenService.validateRefreshToken(refreshToken)) {
-            return ResultBody.error("刷新token无效");
+        @PostMapping("/logout")
+        public ResultBody<Void> logout(HttpServletRequest request) {
+            String header = request.getHeader("Authorization");
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                String username = tokenService.getUsernameFromToken(token);
+                tokenCache.deleteTokens(username);
+            }
+            return ResultBody.success();
         }
 
-        String username = tokenService.getUsernameFromToken(refreshToken);
+        @PostMapping("/refresh")
+        public ResultBody<Map<String, String>> refresh(@RequestBody RefreshDTO dto) {
+            String oldRefresh = dto.getRefresh_token();
+            if (!jwtUtil.validate(oldRefresh) || !jwtUtil.isRefresh(oldRefresh)) {
+                return ResultBody.error("非法 refresh_token");
+            }
 
-        // 生成新的access token
-        String newAccessToken = tokenService.generateRefreshToken(username);
+            String username = jwtUtil.getUsername(oldRefresh);
+            String cached = tokenCache.getRefresh(username);
+            if (!oldRefresh.equals(cached)) {
+                return ResultBody.error("refresh_token 已失效");
+            }
 
-        // 更新Redis中的access token
-        redisTemplate.opsForValue().set("auth:access_token:" + username, newAccessToken, tokenService.getAccessTokenExpiration(), TimeUnit.MILLISECONDS);
+            String newAccess = jwtUtil.generateAccessToken(username);
+            String newRefresh = jwtUtil.generateRefreshToken(username);
 
-        Map<String, String> result = new HashMap<>();
-        result.put("access_token", newAccessToken);
+            tokenCache.saveAccess(username, newAccess, 7200);
+            tokenCache.saveRefresh(username, newRefresh, 86400);
 
-        return ResultBody.success(result);
+            return ResultBody.success(Map.of(
+                    "access_token", newAccess,
+                    "refresh_token", newRefresh
+            ));
+        }
     }
 }

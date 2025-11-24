@@ -4,24 +4,45 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
+@Slf4j
 @Component
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
+    private UserDetailsService userDetailsService;
+
+    // 忽略的URL列表
+    private List<String> ignoreUrls;
+
+    private Boolean blacklistEnabled;
+
     /**
      * 两个功能，一个是认证 一个是授权
-     *
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        String header = request.getHeader("Authorization");
+        //判断是否开启黑名单的的功能，且请求头中有Authorization 信息，则检查Token是否在黑名单中
+        if (blacklistEnabled) {
+            log.info("AuthenticationTokenFilter：检查黑名单功能启动");
+            String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+            Assert.notNull(header, "请求头不包含 Authorization");
+            if(header.startsWith("")){
+
+            }
 
         }
-        // 放行
+
+    }
+    // 放行
 
 }

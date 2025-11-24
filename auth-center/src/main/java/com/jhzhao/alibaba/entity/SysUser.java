@@ -13,14 +13,13 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -66,8 +65,14 @@ public class SysUser implements Serializable, UserDetails {
      * 返回用户权限集合（RBAC 权限标识，如 user:view）
      * 注意：这里返回的是权限字符串，不是角色
      */
-    @Transient // 不持久化到数据库
-    private Set<String> permissions = new HashSet<>();
+    //手动查询角色，不映射
+    @Transient
+    private Set<String> roleCodes;
+
+    //手动查询权限，不映射
+    @Transient
+    private Set<String> permissions;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
