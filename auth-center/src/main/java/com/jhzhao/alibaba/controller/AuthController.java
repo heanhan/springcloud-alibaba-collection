@@ -1,12 +1,16 @@
 package com.jhzhao.alibaba.controller;
 
+import com.jhzhao.alibaba.entity.SysUser;
 import com.jhzhao.alibaba.model.vo.LoginUserVO;
 import com.jhzhao.alibaba.model.vo.RefreshVO;
+import com.jhzhao.alibaba.model.vo.UserRegisterVO;
 import com.jhzhao.alibaba.result.ResultBody;
 import com.jhzhao.alibaba.security.TokenCache;
 import com.jhzhao.alibaba.security.TokenService;
+import com.jhzhao.alibaba.service.SysUserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,6 +36,21 @@ public class AuthController {
 
     @Resource
     private TokenCache tokenCache;
+
+    @Resource
+    private SysUserService sysUserService;
+
+    /**
+     * 用户注册
+     * @param request
+     * @return
+     */
+    @PostMapping("/register")
+    public ResultBody register(@Valid @RequestBody UserRegisterVO request) {
+        SysUser registeredUser = sysUserService.register(request);
+        return ResultBody.success();
+    }
+
 
     @PostMapping("/login")
     public ResultBody<Map<String, String>> login(@RequestBody LoginUserVO dto) {

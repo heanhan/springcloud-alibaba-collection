@@ -1,28 +1,3 @@
-server:
-  port: 9100
-  servlet:
-    context-path: /api/auth
 spring:
-  application:
-    name: auth-center
-  config:
-    import:
-      - optional:nacos:auth-center.yaml
-
-  cloud:
-    nacos:
-      server-addr: 172.16.75.107:8848   # ← 仍然是 8848！不是 8080！
-      username: nacos
-      password: nacos
-      namespace: 1ad5b82c-57f8-4f98-9803-8ada361dffbf   # 替换为 dev 命名空间的 UUID
-
-      config:
-        group: DEFAULT_GROUP
-        file-extension: yaml
-
-      discovery:
-        group: DEFAULT_GROUP
-jwt:
-  secret: 1234567890qwertyuiopasdfghjklzxcvbnm
-  access-exp: 7200
-  refresh-exp: 86400
+  profiles:
+    active: local

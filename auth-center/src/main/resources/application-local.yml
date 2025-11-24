@@ -1,11 +1,10 @@
 server:
   port: 8083
-
 spring:
   application:
     name: auth-center
   datasource:
-    url: jdbc:mysql://172.16.75.105:3306/auth_db?useSSL=false&serverTimezone=Asia/Hong_Kong&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://172.16.75.105:3306/auth_center_db?useSSL=false&serverTimezone=Asia/Hong_Kong&allowPublicKeyRetrieval=true
     username: root
     password: abcd@123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -34,22 +33,8 @@ spring:
       host: 172.16.75.105
       port: 6379
       password: abcd@123456
-
-# JWT
+#jwt相关参数
 jwt:
-  secret: springcloud-alibaba-collection-auth-center
-  expiration: 86400000  # 24小时
-
-  # Nacos
-
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 172.16.75.107:8848
-        namespace: dev
-      config:
-        import-check:
-          enabled: false
-        server-addr: 172.16.75.107:8848
-        namespace: dev
-        file-extension: yaml
+  secret: 1234567890qwertyuiopasdfghjklzxcvbnm
+  access-exp: 7200
+  refresh-exp: 86400
