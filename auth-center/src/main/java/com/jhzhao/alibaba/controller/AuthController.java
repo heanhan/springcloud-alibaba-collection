@@ -47,8 +47,8 @@ public class AuthController {
      */
     @PostMapping("/register")
     public ResultBody register(@Valid @RequestBody UserRegisterVO request) {
-        SysUser registeredUser = sysUserService.register(request);
-        return ResultBody.success();
+        SysUser user = sysUserService.register(request);
+        return ResultBody.success(user.getUsername()+": 账号创建成功！");
     }
 
 
@@ -59,14 +59,8 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
             );
             String username = auth.getName();
-            String accessToken = tokenService.generateAccessToken(username);
-            String refreshToken = tokenService.generateRefreshToken(username);
-            tokenCache.saveAccess(username, accessToken, 7200);
-            tokenCache.saveRefresh(username, refreshToken, 86400);
-            return ResultBody.success(Map.of(
-                    "access_token", accessToken,
-                    "refresh_token", refreshToken
-            ));
+            Map<String, String> stringStringMap = tokenService.generateToken(username);
+            return ResultBody.success(stringStringMap);
         } catch (BadCredentialsException e) {
             return ResultBody.error("用户名或密码错误");
         }
@@ -86,7 +80,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResultBody<Map<String, String>> refresh(@RequestBody RefreshVO dto) {
         String oldRefresh = dto.getRefresh_token();
-        if (!tokenService.validateAccessToken(oldRefresh) || !tokenService.validateRefreshToken(oldRefresh)) {
+        if (!tokenService.validateRefreshToken(oldRefresh)) {
             return ResultBody.error("非法 refresh_token");
         }
         String username = tokenService.getUsernameFromToken(oldRefresh);

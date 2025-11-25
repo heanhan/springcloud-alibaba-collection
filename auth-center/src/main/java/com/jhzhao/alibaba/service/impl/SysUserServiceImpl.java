@@ -5,7 +5,11 @@ import com.jhzhao.alibaba.model.vo.UserRegisterVO;
 import com.jhzhao.alibaba.repository.SysUserRepository;
 import com.jhzhao.alibaba.service.SysUserService;
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 /**
  * Author zhaojh0912
@@ -18,6 +22,9 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Resource
     private SysUserRepository sysUserRepository;
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
     /**
      * 用户注册
      *
@@ -26,6 +33,12 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public SysUser register(UserRegisterVO request) {
-        return null;
+        SysUser sysUser = new SysUser();
+        BeanUtils.copyProperties(request,sysUser);
+        sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));//对密码加密
+        sysUser.setCreateTime(LocalDateTime.now());//创建时间
+        sysUser.setUpdateTime(LocalDateTime.now());//更新时间
+        SysUser save = sysUserRepository.save(sysUser);
+        return save;
     }
 }

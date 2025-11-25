@@ -36,6 +36,7 @@ public class TokenService {
     @Value("${jwt.secret-key:auth-center}")
     private String secretKey;
 
+
     @Resource
     private RedisUtil redisUtil;
 
