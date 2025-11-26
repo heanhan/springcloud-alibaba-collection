@@ -52,8 +52,8 @@ public class AuthController {
     }
 
 
-    @PostMapping("/login")
-    public ResultBody<Map<String, String>> login(@RequestBody LoginUserVO dto) {
+    @PostMapping("/getToken")
+    public ResultBody<Map<String, String>> getToken(@RequestBody LoginUserVO dto) {
         try {
             Authentication auth = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
@@ -77,8 +77,8 @@ public class AuthController {
         return ResultBody.success();
     }
 
-    @PostMapping("/refresh")
-    public ResultBody<Map<String, String>> refresh(@RequestBody RefreshVO dto) {
+    @PostMapping("/refreshToken")
+    public ResultBody<Map<String, String>> refreshToken(@RequestBody RefreshVO dto) {
         String oldRefresh = dto.getRefresh_token();
         if (!tokenService.validateRefreshToken(oldRefresh)) {
             return ResultBody.error("非法 refresh_token");

@@ -19,6 +19,7 @@
     <modules>
         <module>common</module>
         <module>auth-center</module>
+        <module>gateway</module>
     </modules>
 
     <properties>
