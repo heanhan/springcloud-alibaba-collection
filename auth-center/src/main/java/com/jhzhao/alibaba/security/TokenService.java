@@ -19,15 +19,15 @@ import java.util.concurrent.TimeUnit;
 public class TokenService {
 
     /**
-     * access_token 的有效期
+     * access_token 的有效期 2小时
      */
     @Value("${jwt.access-token-expiration:7200}")
     private Long accessTokenExpiration;
 
     /**
-     * refresh_token 的刷新token 时间有效期
+     * refresh_token 的刷新token 时间有效期 2个半小时
      */
-    @Value("${jwt.refresh-token-expiration:8640000}")
+    @Value("${jwt.refresh-token-expiration:9000}")
     private Long refreshTokenExpiration;
 
     /**
@@ -71,9 +71,9 @@ public class TokenService {
     }
 
     /**
-     * 根据yonghyongh
-     * @param username
-     * @return
+     * 生成刷新令牌 token_token
+     * @param username 用户名
+     * @return token_token
      */
     public String generateAccessToken(String username) {
         Date now = new Date();
@@ -86,6 +86,11 @@ public class TokenService {
                 .compact();
     }
 
+    /**
+     * 生成刷新令牌 refresh_token
+     * @param username 用户名
+     * @return refresh_token
+     */
     public String generateRefreshToken(String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpiration);
@@ -97,6 +102,11 @@ public class TokenService {
                 .compact();
     }
 
+    /**
+     * 验证 access_token的有效性
+     * @param accessToken 令牌
+     * @return boolean
+     */
     public boolean validateAccessToken(String accessToken) {
         try {
             Jwts.parser()
@@ -110,6 +120,11 @@ public class TokenService {
         }
     }
 
+    /**
+     * 验证 refresh_token的有效性
+     * @param refreshToken 刷新的令牌
+     * @return boolean
+     */
     public boolean validateRefreshToken(String refreshToken) {
         try {
             Jwts.parser()
@@ -123,6 +138,11 @@ public class TokenService {
         }
     }
 
+    /**
+     * 从令牌中解析用户名
+     * @param token 令牌
+     * @return 用户名
+     */
     public String getUsernameFromToken(String token) {
         try {
             Claims claims = Jwts.parser()
@@ -137,6 +157,11 @@ public class TokenService {
         }
     }
 
+    /**
+     * token是否有效
+     * @param token 令牌
+     * @return
+     */
     public boolean isTokenExpired(String token) {
         try {
             Claims claims = Jwts.parser()
@@ -169,10 +194,6 @@ public class TokenService {
         }
     }
 
-    // 添加getter方法以便在其他地方使用
-    public Long getAccessTokenExpiration() {
-        return accessTokenExpiration;
-    }
 }
 
 
