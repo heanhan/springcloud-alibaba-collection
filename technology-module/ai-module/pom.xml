@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.jhzhao.alibaba</groupId>
+        <artifactId>technology-module</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>ai-module</artifactId>
+    <packaging>pom</packaging>
+
+    <name>ai-module</name>
+    <modules>
+        <module>spring-ai-module</module>
+        <module>spring-langchain4j</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.jhzhao.alibaba</groupId>
+            <artifactId>web-components</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+    </dependencies>
+</project>

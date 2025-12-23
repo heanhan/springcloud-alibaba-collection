@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>3.5.8</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -20,6 +20,7 @@
         <module>common</module>
         <module>auth-center</module>
         <module>gateway</module>
+        <module>technology-module</module>
     </modules>
 
     <properties>
@@ -110,6 +111,36 @@
 
 
     </dependencies>
+
+    <!--统一环境-->
+    <profiles>
+        <profile>
+            <!--生产环境-部署，打包默认-->
+            <id>prod</id>
+            <properties>
+                <profiles.active>prod</profiles.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+
+        <profile>
+            <!--开发环境-部署-->
+            <id>dev</id>
+            <properties>
+                <profiles.active>dev</profiles.active>
+            </properties>
+        </profile>
+
+        <profile>
+            <!--本地电脑的环境-部署-->
+            <id>local</id>
+            <properties>
+                <profiles.active>local</profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 
     <!-- 2. Spring Boot 插件：智能跳过无启动类的模块（如 api、common、public-components） -->
     <build>

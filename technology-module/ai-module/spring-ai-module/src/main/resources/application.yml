@@ -1,0 +1,18 @@
+server:
+  port: 9300
+  servlet:
+    context-path: /springai
+spring:
+  application:
+    name: spring-ai-model
+  profiles:
+    active: @profiles.active@
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3:8b
+        options:
+          keep-alive: 1h
+          temperature: 0.6
+          num-ctx: 8192
