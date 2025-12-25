@@ -11,7 +11,8 @@ spring:
     ollama:
       base-url: http://localhost:11434
       chat:
-        model: qwen3:8b
+#        model: qwen3:8b
+        model: qwen3:32b
         options:
           keep-alive: 1h
           temperature: 0.6

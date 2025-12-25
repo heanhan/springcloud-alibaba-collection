@@ -3,31 +3,20 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.jhzhao.alibaba</groupId>
-        <artifactId>technology-module</artifactId>
+        <artifactId>ai-module</artifactId>
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>ai-module</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>ai-interface</artifactId>
+    <packaging>jar</packaging>
 
-    <name>ai-module</name>
-    <modules>
-        <module>spring-ai-module</module>
-        <module>spring-langchain4j</module>
-        <module>ai-common</module>
-        <module>ai-interface</module>
-    </modules>
+    <name>ai-interface</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.jhzhao.alibaba</groupId>
-            <artifactId>web-components</artifactId>
-            <version>1.0.0</version>
-        </dependency>
 
     </dependencies>
 </project>
