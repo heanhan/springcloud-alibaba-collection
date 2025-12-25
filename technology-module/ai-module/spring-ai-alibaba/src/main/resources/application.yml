@@ -1,0 +1,4 @@
+server:
+  port: 9500
+  servlet:
+    context-path: /alibaba

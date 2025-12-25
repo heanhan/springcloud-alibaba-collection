@@ -3,32 +3,25 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.jhzhao.alibaba</groupId>
-        <artifactId>technology-module</artifactId>
+        <artifactId>ai-module</artifactId>
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>ai-module</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>spring-ai-alibaba</artifactId>
+    <packaging>jar</packaging>
 
-    <name>ai-module</name>
-    <modules>
-        <module>spring-ai-module</module>
-        <module>spring-langchain4j</module>
-        <module>ai-common</module>
-        <module>ai-interface</module>
-        <module>spring-ai-alibaba</module>
-        <module>ai-web</module>
-    </modules>
+    <name>spring-ai-alibaba</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+
         <dependency>
-            <groupId>com.jhzhao.alibaba</groupId>
-            <artifactId>web-components</artifactId>
-            <version>1.0.0</version>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-agent-framework</artifactId>
+            <version>1.1.0.0-RC2</version>
         </dependency>
 
     </dependencies>
