@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.jhzhao.alibaba</groupId>
+        <artifactId>springcloud-alibaba-collection</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>mcp-server-demo</artifactId>
+    <packaging>jar</packaging>
+
+    <name>mcp-server-demo</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.ai.alibaba.version>1.0.0.4</spring.ai.alibaba.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.jhzhao.alibaba</groupId>
+            <artifactId>web-components</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- Nacos -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!-- MCP Server (WebMVC) -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.ai</groupId>
+                    <artifactId>spring-ai-autoconfigure-mcp-server-common</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-starter-tool-calling-common</artifactId>
+            <version>1.1.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--mcp server 的服务注册需要用的依赖 1.0.0.3 上
+         issue上 GitHub alibaba/spring-ai-alibaba #972、#2663 等类似描述：启动无报错，但 Nacos 看不到实例）
+         升级  1.1.2.1
+         -->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud.ai</groupId>-->
+<!--            <artifactId>spring-ai-alibaba-starter-mcp-registry</artifactId>-->
+<!--            <version>1.0.0.3</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud.ai</groupId>-->
+<!--            <artifactId>spring-ai-alibaba-starter-mcp-registry</artifactId>-->
+<!--            <version>1.1.2.1</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-starter-mcp-registry</artifactId>
+            <version>1.0.0.4</version>
+        </dependency>
+
+        <!-- 2. Spring Cloud 2025.0.0 (Kilburn) -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring-cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+
+        <!-- 3. Spring Cloud Alibaba 2025.0.0.0 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+            <version>${spring-cloud-alibaba.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+
+
+    </dependencies>
+</project>

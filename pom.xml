@@ -21,6 +21,7 @@
         <module>auth-center</module>
         <module>gateway</module>
         <module>technology-module</module>
+        <module>mcp-server-demo</module>
     </modules>
 
     <properties>

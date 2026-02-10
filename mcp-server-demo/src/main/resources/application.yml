@@ -1,0 +1,43 @@
+server:
+  port: 10080
+
+spring:
+  application:
+    name: mcp-server-demo
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 172.16.75.105:8848
+        username: nacos
+        password: nacos
+        # 这个地方不能写 命名空间的名称 一定要是 id
+        namespace: 5529a3a8-aedd-492f-ac30-ef5378fa2320
+  # 配置  mcp
+  ai:
+    mcp:
+      server:
+        name: mcp-server-demo
+        version: 1.0.0
+        type: async
+        instructions: "mcp服务器提供工具和资源"
+        stdio:
+          enabled: false   # 注意这里是 stdio.enabled（不是 stdio: false）
+
+    alibaba:
+      mcp:
+        nacos:
+          server-addr: 172.16.75.105:8848
+          namespace: 5529a3a8-aedd-492f-ac30-ef5378fa2320
+          username: nacos
+          password: nacos
+          register:
+            enabled: true
+          api-version: v2   # ← 必须在这里，和 server-addr 平级
+# 用来排查 mcp 的注册过程
+logging:
+  level:
+    com.alibaba.nacos: debug
+    com.alibaba.cloud.ai: debug          # MCP 相关
+    org.springframework.cloud: debug
+    root: info
+
