@@ -13,8 +13,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class WeatherService {
 
-    @Tool(description = "通过城市名称获取天气信息")
-    public String getWeather(@ToolParam(description = "城市名称") String cityName) {
-        return "Sunny in " + cityName;
-    }
+
 }

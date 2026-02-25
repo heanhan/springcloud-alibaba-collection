@@ -20,9 +20,10 @@ spring:
         version: 1.0.0
         type: async
         instructions: "mcp服务器提供工具和资源"
+        transport: streamable-http
         stdio:
           enabled: false   # 注意这里是 stdio.enabled（不是 stdio: false）
-
+        request-timeout: 300000
     alibaba:
       mcp:
         nacos:

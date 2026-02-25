@@ -22,6 +22,7 @@
         <module>gateway</module>
         <module>technology-module</module>
         <module>mcp-server-demo</module>
+        <module>tool-mcp-demo</module>
     </modules>
 
     <properties>
@@ -31,6 +32,9 @@
         <spring-boot.version>3.5.7</spring-boot.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <spring-cloud-alibaba.version>2025.0.0.0</spring-cloud-alibaba.version>
+
+        <spring.ai.alibaba.version>1.0.0.4</spring.ai.alibaba.version>
+        <spring-ai.version>1.0.1</spring-ai.version>
 
         <!--一下是业务相关的依赖-->
         <lombok-version>1.18.42</lombok-version>
@@ -67,6 +71,14 @@
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
                 <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

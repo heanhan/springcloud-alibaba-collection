@@ -14,64 +14,30 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.ai.alibaba.version>1.0.0.4</spring.ai.alibaba.version>
+        <spring-ai-alibaba.version>1.1.2.1</spring-ai-alibaba.version>
+        <spring-cloud-alibaba.version>2025.0.0.0</spring-cloud-alibaba.version> <!-- 兼容 Spring Boot 4.0 -->
     </properties>
 
     <dependencies>
 
-        <dependency>
-            <groupId>com.jhzhao.alibaba</groupId>
-            <artifactId>web-components</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <!-- Nacos -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-
-        <!-- MCP Server (WebMVC) -->
+        <!-- Spring AI MCP Server Starter (核心 MCP 支持) -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
-            <version>1.0.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.ai</groupId>
-                    <artifactId>spring-ai-autoconfigure-mcp-server-common</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba.cloud.ai</groupId>
-            <artifactId>spring-ai-alibaba-starter-tool-calling-common</artifactId>
-            <version>1.1.2.1</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!--mcp server 的服务注册需要用的依赖 1.0.0.3 上
-         issue上 GitHub alibaba/spring-ai-alibaba #972、#2663 等类似描述：启动无报错，但 Nacos 看不到实例）
-         升级  1.1.2.1
-         -->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud.ai</groupId>-->
-<!--            <artifactId>spring-ai-alibaba-starter-mcp-registry</artifactId>-->
-<!--            <version>1.0.0.3</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud.ai</groupId>-->
-<!--            <artifactId>spring-ai-alibaba-starter-mcp-registry</artifactId>-->
-<!--            <version>1.1.2.1</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
-
+        <!-- Spring AI Alibaba MCP Registry Starter (Nacos 注册 + Streamable 支持) -->
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-starter-mcp-registry</artifactId>
-            <version>1.0.0.4</version>
+            <version>${spring-ai-alibaba.version}</version>
+        </dependency>
+
+        <!-- Nacos Discovery for 服务发现 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <scope>compile</scope>
         </dependency>
 
         <!-- 2. Spring Cloud 2025.0.0 (Kilburn) -->
@@ -87,11 +53,41 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-            <version>${spring-cloud-alibaba.version}</version>
+            <version>2025.0.0.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
 
 
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>1.1.2</version>  <!-- Spring AI 整体最新 Milestone -->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
