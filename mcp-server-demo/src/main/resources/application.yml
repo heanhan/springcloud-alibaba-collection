@@ -11,7 +11,7 @@ spring:
         username: nacos
         password: nacos
         # 这个地方不能写 命名空间的名称 一定要是 id
-        namespace: 5529a3a8-aedd-492f-ac30-ef5378fa2320
+        namespace: 1419704a-93fa-47da-ae68-9b681a2296eb
   # 配置  mcp
   ai:
     mcp:
@@ -28,7 +28,7 @@ spring:
       mcp:
         nacos:
           server-addr: 172.16.75.105:8848
-          namespace: 5529a3a8-aedd-492f-ac30-ef5378fa2320
+          namespace: 1419704a-93fa-47da-ae68-9b681a2296eb
           username: nacos
           password: nacos
           register:

@@ -23,6 +23,7 @@
         <module>technology-module</module>
         <module>mcp-server-demo</module>
         <module>tool-mcp-demo</module>
+        <module>mcp-demo-items</module>
     </modules>
 
     <properties>
@@ -40,7 +41,6 @@
         <lombok-version>1.18.42</lombok-version>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
         <knife4j-openapi3-version>4.5.0</knife4j-openapi3-version>
-
         <mysql.version>8.0.30</mysql.version>
 
     </properties>
@@ -75,13 +75,13 @@
                 <scope>import</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-bom</artifactId>
-                <version>${spring-ai.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.ai</groupId>-->
+<!--                <artifactId>spring-ai-bom</artifactId>-->
+<!--                <version>${spring-ai.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
 
             <dependency>
                 <groupId>org.projectlombok</groupId>
