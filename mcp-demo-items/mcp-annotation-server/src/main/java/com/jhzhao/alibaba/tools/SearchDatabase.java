@@ -27,59 +27,60 @@ public class SearchDatabase {
     private CommodityOrderService commodityOrderService;
 
     /**
-     * 统一 MCP 工具：mcp_milk_tea
+     * 统一 MCP 工具：mcp_milk_tee_menu
      *
-     * @param action   操作类型：menu 或 order
      * @param id       商品ID（仅 order 时需要）
      * @param quantity 数量（仅 order 时需要）
      * @return 结果描述
      */
-    @McpTool(name = "mcp_milk_tea",description = "查询奶茶菜单或下单购买。action 必填：'menu' 查菜单，'order' 下单；下单时需提供 id 和 quantity。")
-    public String mcpMilkTea(String action, Integer id, Integer quantity) {
-        log.info("调用 mcp_milk_tea 工具: action={}, id={}, quantity={}", action, id, quantity);
+    @McpTool(name = "mcp_milk_tee_menu", description = "查询奶茶菜单")
+    public String mcpMilkTeaMenu(Integer id, Integer quantity) {
+        log.info("调用 mcp_milk_tea 工具: id={}, quantity={}",id, quantity);
         List<Commodity> allCommodityList = commodityService.findAllCommodityList(null);
         String jsonString = JSONObject.toJSONString(allCommodityList);
-        if ("menu".equals(action)) {
-            // 返回菜单字符串（或 JSON，但 MCP 通常期望 string）
+        return "当前菜单:\n" + jsonString;
+    }
 
-            return "当前菜单:\n" + jsonString;
+    /**
+     * 统一 MCP 工具：mcp_milk_tea_order
+     *
+     * @param name       商品ID（仅 order 时需要）
+     * @param quantity 数量（仅 order 时需要）
+     * @return 结果描述
+     */
+    @McpTool(name = "mcp_milk_tea_order", description = "奶茶下单购买。下单时需提供 name 和 quantity。")
+    public String mcpMilkTeaOrder(String name, Integer quantity) {
+        log.info("调用 mcp_milk_tea 工具: 奶茶名称:{}, 杯数：{}", name, quantity);
+        List<Commodity> allCommodityList = commodityService.findAllCommodityList(null);
+        if (name == null || name.isEmpty() || quantity == null) {
+            return "下单失败：缺少商品ID或数量";
         }
+        // 查找商品
+        Commodity commodity = allCommodityList.stream()
+                .filter(m -> m.getComodityName().equals(name))
+                .findFirst()
+                .orElse(null);
 
-        if ("order".equals(action)) {
-            if (id == null || quantity == null) {
-                return "下单失败：缺少商品ID或数量";
-            }
-
-            // 查找商品
-            Commodity commodity = allCommodityList.stream()
-                    .filter(m -> m.getId()==id)
-                    .findFirst()
-                    .orElse(null);
-
-            if (commodity == null) {
-                return "无效的商品ID: " + id;
-            }
-
-            try {
-                double total = commodity.getPrice() * quantity;
-                String result = String.format("下单成功：%s x %d，总价：%.2f 元", commodity.getComodityName(), quantity, total);
-                log.info("订单完成: {}", result);
-                CommodityOrder order = new CommodityOrder();
-                order.setComodityCode(commodity.getComodityCode());
-                order.setComodityName(commodity.getComodityName());
-                order.setPrice(commodity.getPrice());
-                order.setCount(quantity);
-                order.setTotalPrice(total);
-                order.setCreateTime(new Date());
-                order.setUpdateTime(new Date());
-                commodityOrderService.saveCommodityOrder(order);
-                return result;
-            } catch (NumberFormatException e) {
-                return "数量必须是数字";
-            }
+        if (commodity == null) {
+            return "无效的商品明湖城那个: " + name;
         }
-
-        return "不支持的操作类型，请使用 'menu' 或 'order'";
+        try {
+            double total = commodity.getPrice() * quantity;
+            String result = String.format("下单成功：%s x %d，总价：%.2f 元", commodity.getComodityName(), quantity, total);
+            log.info("订单完成: {}", result);
+            CommodityOrder order = new CommodityOrder();
+            order.setComodityCode(commodity.getComodityCode());
+            order.setComodityName(commodity.getComodityName());
+            order.setPrice(commodity.getPrice());
+            order.setCount(quantity);
+            order.setTotalPrice(total);
+            order.setCreateTime(new Date());
+            order.setUpdateTime(new Date());
+            commodityOrderService.saveCommodityOrder(order);
+            return result;
+        } catch (NumberFormatException e) {
+            return "数量必须是数字";
+        }
     }
 
     @McpTool(name = "longRunningTask", description = "执行长时间运行的任务")
@@ -98,7 +99,7 @@ public class SearchDatabase {
     @McpTool(name = "riskyOperation", description = "执行危险操作")
     public String riskyOperation(@McpToolParam(description = "Operation parameter") String param) {
         try {
-            log.info("接收到的运行参数：{}",param);
+            log.info("接收到的运行参数：{}", param);
             // 执行操作
             return "操作成功";
         } catch (Exception e) {
