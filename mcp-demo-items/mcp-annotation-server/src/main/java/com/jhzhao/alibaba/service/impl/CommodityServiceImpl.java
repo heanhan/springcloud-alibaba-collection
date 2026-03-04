@@ -5,11 +5,22 @@ import com.jhzhao.alibaba.entity.Commodity;
 import com.jhzhao.alibaba.model.vo.CommodityVo;
 import com.jhzhao.alibaba.service.CommodityService;
 import jakarta.annotation.Resource;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import org.springframework.data.domain.Example;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -44,4 +55,6 @@ public class CommodityServiceImpl implements CommodityService {
     public void addCommodity(Commodity param) {
         commodityRepository.save(param);
     }
+
+
 }

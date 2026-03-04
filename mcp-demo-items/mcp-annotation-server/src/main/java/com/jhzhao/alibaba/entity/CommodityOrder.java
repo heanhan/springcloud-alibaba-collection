@@ -27,6 +27,9 @@ public class CommodityOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "phone")
+    private String phone;
+
     @Column(name = "comodity_code")
     private String comodityCode;
 
