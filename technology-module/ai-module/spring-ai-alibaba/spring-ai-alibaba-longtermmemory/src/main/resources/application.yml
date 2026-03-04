@@ -1,0 +1,28 @@
+server:
+  port: 9293
+
+spring:
+  application:
+    name: spring-ai-alibaba
+  #配置 大模型地址
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3:8b
+    memory:
+      redis:
+        host: 172.16.75.105
+        port: 6379
+        password: abcd@123456
+        timeout:  5000
+    chat:
+      memory:
+        repository:
+          jdbc:
+            mysql:
+              jdbc-url: jdbc:mysql://172.16.75.105:3306/spring_ai_alibaba_mysql?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true&tinyInt1isBit=false&allowLoadLocalInfile=true&allowLocalInfile=true&allowUrl
+              username: root
+              password: abcd@123456
+              driver-class-name: com.mysql.cj.jdbc.Driver
+              enabled: true

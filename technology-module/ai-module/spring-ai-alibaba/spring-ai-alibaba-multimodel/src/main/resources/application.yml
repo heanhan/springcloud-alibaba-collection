@@ -1,0 +1,23 @@
+server:
+  port: 9295
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    # 这个项目是 调用多个模型 配置多个模型
+    name: more-client-examples
+  #配置 大模型地址
+  ai:
+    # ollama的配置
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3:8b
+    # openai的配置
+    openai:
+      api-key: adsfasfasdfsadfasdfadsfasdf
+      base-url: https://api.openai-hk.com
+    dashscope:
+      chat:
+        api-key: dsfsdafadsfadsfdsafdsafsadfa

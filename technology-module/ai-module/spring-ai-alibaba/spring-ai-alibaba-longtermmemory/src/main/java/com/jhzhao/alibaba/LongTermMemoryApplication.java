@@ -7,10 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Hello world!
  *
  */
-@SpringBootApplication
-public class AiAlibabaApplication {
 
-    public static void main( String[] args ) {
-        SpringApplication.run(AiAlibabaApplication.class);
+@SpringBootApplication
+public class LongTermMemoryApplication {
+
+    public static void main( String[] args )
+    {
+        SpringApplication.run(LongTermMemoryApplication.class);
     }
 }

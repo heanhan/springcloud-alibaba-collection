@@ -8,9 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
-public class AiAlibabaApplication {
-
-    public static void main( String[] args ) {
-        SpringApplication.run(AiAlibabaApplication.class);
+public class MultiModelApplication {
+    public static void main( String[] args )
+    {
+        SpringApplication.run(MultiModelApplication.class);
     }
 }

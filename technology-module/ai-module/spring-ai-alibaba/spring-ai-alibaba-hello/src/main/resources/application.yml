@@ -2,7 +2,7 @@ server:
   port: 9291
 spring:
   application:
-    name: spring-ai-alibaba
+    name: spring-ai-alibaba-hello
   #配置 大模型地址
   ai:
     ollama:
