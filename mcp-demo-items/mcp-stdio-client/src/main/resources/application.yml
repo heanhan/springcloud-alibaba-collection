@@ -1,0 +1,25 @@
+server:
+  port: 9391
+  servlet:
+    context-path: /stdio
+spring:
+  application:
+    name: mcp-studio-client
+  # 禁用Web应用，因为我们只使用控制台交互
+  main:
+    # 禁用Web服务器，使用CLI模式
+    web-application-type: none
+  #配置 大模型地址
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3:8b
+    mcp:
+      client:
+        stdio:
+          servers-configuration: classpath:/mcp-servers-config.json
+logging:
+  level:
+    io.modelcontextprotocol.client: debug
+    io.modelcontextprotocol.spec: debug

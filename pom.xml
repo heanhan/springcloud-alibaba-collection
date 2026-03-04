@@ -22,7 +22,7 @@
         <module>gateway</module>
         <module>technology-module</module>
         <module>mcp-demo-items</module>
-<!--        <module>spring-ai-alibaba-items</module>-->
+        <!--        <module>spring-ai-alibaba-items</module>-->
     </modules>
 
     <properties>

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "weather": {
+      "command": "java",
+      "args": [
+        "-Dspring.ai.mcp.server.stdio=true",
+        "-Dspring.main.web-application-type=none",
+        "-Dlogging.pattern.console=",
+        "-jar",
+        "/Users/zhaojh/IdeaProjects/jdk25_projects/maven_projects/springcloud-alibaba-collection/mcp-demo-items/mcp-studio-server/target/mcp-studio-server-1.0.0.jar"
+      ],
+      "env": {}
+    }
+  }
+}

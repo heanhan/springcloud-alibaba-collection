@@ -14,6 +14,8 @@
     <modules>
         <module>mcp-annotation-server</module>
         <module>mcp-annotation-client</module>
+        <module>mcp-stdio-client</module>
+        <module>mcp-studio-server</module>
     </modules>
 
     <properties>
@@ -31,6 +33,7 @@
             <artifactId>fastjson</artifactId>
         </dependency>
 
-
     </dependencies>
+
+
 </project>

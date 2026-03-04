@@ -1,0 +1,26 @@
+server:
+  port: 9298
+
+spring:
+  application:
+    name: mcp-studio-server
+  main:
+    # 禁用Web应用类型，因为我们使用STDIO通信
+    web-application-type: none
+    # 禁用启动banner，避免干扰STDIO通信
+    banner-mode: off
+
+  ai:
+    # MCP服务器配置
+    mcp:
+      server:
+        name: my-weather-server
+        version: 1.0.0
+        # 启用STDIO传输
+        stdio: true
+# 禁用控制台日志格式，避免干扰STDIO通信
+#logging:
+#  pattern:
+#    console: off
+
+
