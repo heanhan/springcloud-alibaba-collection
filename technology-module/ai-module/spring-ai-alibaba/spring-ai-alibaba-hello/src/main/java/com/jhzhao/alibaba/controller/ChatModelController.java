@@ -1,4 +1,4 @@
-package com.jhzhao.alibaba.ai.controller;
+package com.jhzhao.alibaba.controller;
 
 
 import jakarta.servlet.http.HttpServletResponse;

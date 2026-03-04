@@ -1,4 +1,4 @@
-package com.jhzhao.alibaba.ai;
+package com.jhzhao.alibaba;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
