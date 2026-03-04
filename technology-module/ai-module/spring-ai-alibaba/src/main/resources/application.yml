@@ -1,4 +1,11 @@
 server:
-  port: 9500
-  servlet:
-    context-path: /alibaba
+  port: 9291
+spring:
+  application:
+    name: spring-ai-alibaba
+  #配置 大模型地址
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3:8b
