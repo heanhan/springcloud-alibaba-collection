@@ -30,6 +30,11 @@ public class HelloChatController {
     private static final String DEFAULT_PROMPT = "你是一个博学的智能聊天助手，请根据用户提问回答！";
 
     private ChatClient client;
+
+//    ChatModel vs ChatClient
+//    ChatModel：底层API，直接与模型交互，提供最大控制权
+//    ChatClient：高级API，封装了常用功能（日志、参数设置等），更易用
+
 //   精度设置参考
 //    // 1. 最推荐的日常通用设置（类似 Grok / ChatGPT 默认风格）
 //    ChatOptions options = ChatOptions.builder()
