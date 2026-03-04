@@ -1,0 +1,24 @@
+server:
+  port: 9296
+spring:
+  application:
+    name: spring-ai-alibaba-nacos-prompt
+  config:
+    import:
+      - "optional:nacos:prompt-config.json"
+  nacos:
+    server-addr: 172.16.75.105:8848
+    config:
+      username: nacos
+      password: nacos
+
+  #配置 大模型地址
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3:8b
+    nacos:
+      prompt:
+        template:
+          enabled: true

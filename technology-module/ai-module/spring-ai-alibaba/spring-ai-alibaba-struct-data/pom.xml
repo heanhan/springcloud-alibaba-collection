@@ -7,16 +7,20 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>spring-ai-alibaba-hello</artifactId>
+    <artifactId>spring-ai-alibaba-struct-data</artifactId>
     <packaging>jar</packaging>
 
-    <name>spring-ai-alibaba-hello</name>
+    <name>spring-ai-alibaba-struct-data</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
         <!--当前官方推荐的 Starter-->
         <dependency>
@@ -32,13 +36,5 @@
             <version>1.1.2</version>
         </dependency>
 
-        <!-- Web应用支持 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.5.8</version>
-        </dependency>
-
     </dependencies>
-
 </project>

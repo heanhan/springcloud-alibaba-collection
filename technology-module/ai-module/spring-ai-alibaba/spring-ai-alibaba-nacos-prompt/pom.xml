@@ -7,18 +7,16 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>spring-ai-alibaba-hello</artifactId>
+    <artifactId>spring-ai-alibaba-nacos-prompt</artifactId>
     <packaging>jar</packaging>
 
-    <name>spring-ai-alibaba-hello</name>
+    <name>spring-ai-alibaba-nacos-prompt</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-
-        <!--当前官方推荐的 Starter-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-ollama</artifactId>
@@ -36,8 +34,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.5.8</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-starter-nacos-prompt</artifactId>
+            <version>1.1.2.0</version>
+        </dependency>
+
 
     </dependencies>
 

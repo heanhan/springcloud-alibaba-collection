@@ -16,6 +16,9 @@
         <module>spring-ai-alibaba-memory</module>
         <module>spring-ai-alibaba-longtermmemory</module>
         <module>spring-ai-alibaba-multimodel</module>
+        <module>spring-ai-alibaba-prompt</module>
+        <module>spring-ai-alibaba-nacos-prompt</module>
+        <module>spring-ai-alibaba-struct-data</module>
     </modules>
 
     <properties>

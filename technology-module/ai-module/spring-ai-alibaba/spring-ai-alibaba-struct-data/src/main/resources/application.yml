@@ -1,0 +1,13 @@
+server:
+  port: 9297
+spring:
+  application:
+    name: spring-ai-alibaba-struct-data
+  #配置 大模型地址
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3:8b
+        options:
+          format: json
