@@ -20,6 +20,8 @@
         <module>spring-ai-alibaba-nacos-prompt</module>
         <module>spring-ai-alibaba-struct-data</module>
         <module>spring-ai-alibaba-toolcalling</module>
+        <module>spring-ai-alibaba-skills</module>
+        <module>spring-ai-alibaba-longmemory-openclaw</module>
     </modules>
 
     <properties>

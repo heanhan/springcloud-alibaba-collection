@@ -1,0 +1,13 @@
+server:
+  port: 9491
+  servlet:
+    context-path: /openclaw
+spring:
+  application:
+    name: spring-ai-alibaba-langmemory-openclaw
+  #配置 大模型地址
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3:8b
