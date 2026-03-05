@@ -1,6 +1,5 @@
 package com.jhzhao.alibaba.tools;
 
-import com.alibaba.fastjson.JSONObject;
 import com.jhzhao.alibaba.entity.Commodity;
 import com.jhzhao.alibaba.entity.CommodityOrder;
 import com.jhzhao.alibaba.service.CommodityOrderService;
@@ -13,7 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -31,16 +32,24 @@ public class SearchDatabase {
     /**
      * 统一 MCP 工具：mcp_milk_tee_menu
      *
-     * @param id       商品ID（仅 order 时需要）
-     * @param quantity 数量（仅 order 时需要）
      * @return 结果描述
      */
+//    @McpTool(name = "mcp_milk_tee_menu", description = "查询奶茶菜单")
+//    public String mcpMilkTeaMenu() {
+//        log.info("调用 mcp_milk_tee_menu 工具:");
+//        List<Commodity> allCommodityList = commodityService.findAllCommodityList(null);
+//        String jsonString = JSONObject.toJSONString(allCommodityList);
+//        return "当前菜单:\n" + jsonString;
+//    }
+
     @McpTool(name = "mcp_milk_tee_menu", description = "查询奶茶菜单")
-    public String mcpMilkTeaMenu(Integer id, Integer quantity) {
-        log.info("调用 mcp_milk_tea 工具: id={}, quantity={}", id, quantity);
-        List<Commodity> allCommodityList = commodityService.findAllCommodityList(null);
-        String jsonString = JSONObject.toJSONString(allCommodityList);
-        return "当前菜单:\n" + jsonString;
+    public Map<String, Object> mcpMilkTeaMenu() {
+        log.info("调用 mcp_milk_tee_menu 工具:");
+        List<Commodity> list = commodityService.findAllCommodityList(null);
+        Map<String, Object> result = new HashMap<>();
+        result.put("menu", list);
+        result.put("count", list.size());
+        return result;
     }
 
     /**
