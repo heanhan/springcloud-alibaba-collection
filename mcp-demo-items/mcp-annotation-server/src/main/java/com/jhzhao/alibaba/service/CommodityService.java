@@ -1,6 +1,7 @@
 package com.jhzhao.alibaba.service;
 
 import com.jhzhao.alibaba.entity.Commodity;
+import com.jhzhao.alibaba.model.vo.CommodityBuyVo;
 import com.jhzhao.alibaba.model.vo.CommodityVo;
 
 import java.util.List;
@@ -18,5 +19,5 @@ public interface CommodityService {
      * 添加商品
      * @param param
      */
-    void addCommodity(Commodity param);
+    String addCommodity(CommodityBuyVo param);
 }

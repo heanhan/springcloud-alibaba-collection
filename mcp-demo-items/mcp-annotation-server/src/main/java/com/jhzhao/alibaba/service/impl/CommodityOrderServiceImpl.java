@@ -3,6 +3,7 @@ package com.jhzhao.alibaba.service.impl;
 import com.jhzhao.alibaba.dao.CommodityOrderRepository;
 import com.jhzhao.alibaba.entity.Commodity;
 import com.jhzhao.alibaba.entity.CommodityOrder;
+import com.jhzhao.alibaba.model.vo.CommodityOrderBuyVo;
 import com.jhzhao.alibaba.service.CommodityOrderService;
 import jakarta.annotation.Resource;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -10,6 +11,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +19,10 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
+@Slf4j
 @Service
 public class CommodityOrderServiceImpl  implements CommodityOrderService {
 
@@ -71,5 +75,38 @@ public class CommodityOrderServiceImpl  implements CommodityOrderService {
         };
         List<CommodityOrder> all = commodityOrderRepository.findAll(spec);
         return all;
+    }
+
+    @Override
+    public String findCommodityOrderInfo(CommodityOrderBuyVo param) {
+        log.info("调用 mcp_milk_tea_search 工具: 奶茶名称:{},手机号：{}, 杯数：{}", param.getCommodityName(), param.getPhone());
+
+        List<CommodityOrder> orders = this.findAllCommodityOrder(param.getPhone(), param.getCommodityName());
+        String detail = orders.stream()
+                .map(item -> String.format(
+                        "商品：%s\n" +
+                                "   单价：¥%.2f   数量：%d   小计：¥%.2f\n",
+                        item.getComodityName(),
+                        item.getPrice(),
+                        item.getCount(),
+                        item.getTotalPrice()
+                ))
+                .collect(Collectors.joining(""));
+
+        double totalAmount = orders.stream()
+                .mapToDouble(CommodityOrder::getTotalPrice)
+                .sum();
+
+        int totalCount = orders.stream()
+                .mapToInt(CommodityOrder::getCount)
+                .sum();
+
+        String result = "订单商品详情：\n" +
+                "────────────────────────────\n" +
+                detail +
+                "────────────────────────────\n" +
+                String.format("商品总数：%d 件\n", totalCount) +
+                String.format("订单总金额：¥%.2f\n", totalAmount);
+        return result;
     }
 }

@@ -1,6 +1,7 @@
 package com.jhzhao.alibaba.service;
 
 import com.jhzhao.alibaba.entity.CommodityOrder;
+import com.jhzhao.alibaba.model.vo.CommodityOrderBuyVo;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface CommodityOrderService {
      * @return
      */
     List<CommodityOrder> findAllCommodityOrder(String phone, String comodityName);
+
+    String findCommodityOrderInfo(CommodityOrderBuyVo param);
 }
