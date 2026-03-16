@@ -20,16 +20,109 @@
         <module>spring-ai-alibaba-nacos-prompt</module>
         <module>spring-ai-alibaba-struct-data</module>
         <module>spring-ai-alibaba-toolcalling</module>
-        <module>spring-ai-alibaba-skills</module>
         <module>spring-ai-alibaba-longmemory-openclaw</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-ai.version>1.1.2</spring-ai.version>
+        <spring-ai-alibaba.version>1.1.2.2</spring-ai-alibaba.version>
+        <spring-ai-alibaba-starter-memory-version>1.1.2.2</spring-ai-alibaba-starter-memory-version>
+        <spring-ai-alibaba-extensions.version>1.1.2.2</spring-ai-alibaba-extensions.version>
+        <spring-ai-alibaba-starter-memory-jdbc-version>1.1.2.2</spring-ai-alibaba-starter-memory-jdbc-version>
+        <spring-ai-alibaba-starter-memory-redis-version>1.1.2.2</spring-ai-alibaba-starter-memory-redis-version>
+        <model-ollama-version>2.0.0-M2</model-ollama-version>
+        <advisors-vector-store-version>2.0.0-M2</advisors-vector-store-version>
+
     </properties>
 
+    <!--项目的 版本依赖版本统一管理-->
+    <dependencyManagement>
+        <dependencies>
+            <!--spring ai bom 的版本控制-->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- ai alibaba 的模块的版本控制 -->
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-bom</artifactId>
+                <version>${spring-ai-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--ai alibaba 用到的模块-->
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-extensions-bom</artifactId>
+                <version>${spring-ai-alibaba-extensions.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- 本地开发的 大模型  ollama 的版本-->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-starter-model-ollama</artifactId>
+                <version>${model-ollama-version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!--向量数据库 vector -->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-advisors-vector-store</artifactId>
+                <version>${advisors-vector-store-version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-starter-memory</artifactId>
+                <version>${spring-ai-alibaba-starter-memory-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-starter-memory-jdbc</artifactId>
+                <version>${spring-ai-alibaba-starter-memory-jdbc-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-starter-memory-redis</artifactId>
+                <version>${spring-ai-alibaba-starter-memory-redis-version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-starter-agentscope</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-studio</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
 
 
     </dependencies>
@@ -39,15 +132,30 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <id>sonatype-snapshots</id>
+            <name>Sonatype Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
 </project>

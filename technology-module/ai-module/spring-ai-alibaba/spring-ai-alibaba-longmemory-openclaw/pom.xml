@@ -31,20 +31,17 @@
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-starter-memory</artifactId>
-            <version>1.1.2.2</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-advisors-vector-store</artifactId>
-            <version>2.0.0-M2</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-ollama</artifactId>
-            <version>1.1.2</version>
             <exclusions>
                 <exclusion>
                     <artifactId>spring-ai-client-chat</artifactId>
@@ -54,12 +51,7 @@
         </dependency>
 
         <!-- 向量存储（这里用最简单的内存版做 demo，生产可换 Milvus/PGVector） -->
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-pgvector-store-spring-boot-starter</artifactId>
-            <version>1.0.0-M6</version>
-            <scope>compile</scope>
-        </dependency>
+
 
         <!-- 文件操作、JSON 等 -->
         <dependency>
