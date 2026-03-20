@@ -1,3 +1,84 @@
+server:
+  port: 8083
 spring:
-  profiles:
-    active: local
+  application:
+    name: auth-center
+# 数据库配置
+  datasource:
+    url: jdbc:mysql://172.16.75.105:3306/auth_center_db?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf8
+    username: root
+    password: abcd@123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 10
+      min-idle: 10
+      max-active: 100
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+
+  # JPA 配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # Redis 配置
+  data:
+    redis:
+      host: 172.16.75.105
+      port: 6379
+      password: abcd@123456
+      database: 0
+      timeout: 60000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.jhzhao.alibaba: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Actuator 配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# 认证服务器配置
+auth:
+  server:
+    issuer: http://localhost:8083
+    # Access Token 有效期 (秒)
+    access-token-ttl: 1800
+    # Refresh Token 有效期 (秒)
+    refresh-token-ttl: 604800
+    # 授权码有效期 (秒)
+    authorization-code-ttl: 300
