@@ -8,10 +8,16 @@ spring:
     web-application-type: none
   #配置 大模型地址
   ai:
-    ollama:
-      base-url: http://localhost:11434
+    openai:
+      base-url: http://192.168.101.49:8000
+      api-key: qwertyuiop
       chat:
-        model: qwen3:8b
+        options:
+          model: GLM-4.7-Flash-4bit
+    #    ollama:
+#      base-url: http://localhost:11434
+#      chat:
+#        model: qwen3:8b
     mcp:
       client:
         enabled: true

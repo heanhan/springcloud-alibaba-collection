@@ -1,0 +1,18 @@
+server:
+  port: 9800
+#代理的路径服务
+mcp-proxy:
+  servers:
+    milktea:
+      url: http://192.168.101.49:9090/sse
+      timeout-ms: 30000
+      connect-timeout-ms: 5000
+    coffee:
+      url: http://192.168.101.50:9091/sse
+      timeout-ms: 45000
+    default:
+      url: http://fallback-server:8080/sse
+      timeout-ms: 20000
+  default-namespace: default
+  tool-name-header: X-Tool-Name
+  tool-name-query-param: tool

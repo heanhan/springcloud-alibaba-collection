@@ -19,12 +19,17 @@
     <dependencies>
 
         <!-- OpenAI API兼容支持 -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.ai</groupId>-->
+<!--            <artifactId>spring-ai-autoconfigure-model-ollama</artifactId>-->
+<!--            <version>1.1.2</version>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-autoconfigure-model-ollama</artifactId>
+            <artifactId>spring-ai-autoconfigure-model-openai</artifactId>
             <version>1.1.2</version>
         </dependency>
-
         <!-- Chat客户端支持 -->
         <dependency>
             <groupId>org.springframework.ai</groupId>

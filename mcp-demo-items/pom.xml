@@ -16,6 +16,7 @@
         <module>mcp-annotation-client</module>
         <module>mcp-stdio-client</module>
         <module>mcp-studio-server</module>
+        <module>mcp-server-proxy</module>
     </modules>
 
     <properties>
