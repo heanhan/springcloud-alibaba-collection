@@ -1,0 +1,341 @@
+{
+  "info": {
+    "name": "OAuth 2.1 Auth Center API",
+    "description": "Spring Authorization Server 1.5.0 OAuth 2.1 API 测试集合",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. 外部系统接入 - Authorization Code + PKCE",
+      "item": [
+        {
+          "name": "Step 1: 生成 PKCE 参数",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "# 在浏览器中打开以下 URL 进行登录授权\nhttp://localhost:8083/oauth2/authorize?response_type=code&client_id=web-app-client&redirect_uri=http://localhost:3000/callback&scope=openid profile email read&state=xyz123&code_challenge={{code_challenge}}&code_challenge_method=S256",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["oauth2", "authorize"],
+              "query": [
+                {"key": "response_type", "value": "code"},
+                {"key": "client_id", "value": "web-app-client"},
+                {"key": "redirect_uri", "value": "http://localhost:3000/callback"},
+                {"key": "scope", "value": "openid profile email read"},
+                {"key": "state", "value": "xyz123"},
+                {"key": "code_challenge", "value": "{{code_challenge}}"},
+                {"key": "code_challenge_method", "value": "S256"}
+              ]
+            },
+            "description": "在浏览器中打开此 URL 进行登录授权。登录成功后，会重定向到 callback URL 并携带 authorization_code。"
+          }
+        },
+        {
+          "name": "Step 2: 交换 Token (Authorization Code)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {"key": "grant_type", "value": "authorization_code"},
+                {"key": "code", "value": "{{authorization_code}}"},
+                {"key": "redirect_uri", "value": "http://localhost:3000/callback"},
+                {"key": "client_id", "value": "web-app-client"},
+                {"key": "code_verifier", "value": "{{code_verifier}}"}
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8083/oauth2/token",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["oauth2", "token"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. 内部系统接入 - Client Credentials",
+      "item": [
+        {
+          "name": "Client Credentials - order-service",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic b3JkZXItc2VydmljZTpvcmRlci1zZXJ2aWNlLXNlY3JldA=="
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {"key": "grant_type", "value": "client_credentials"},
+                {"key": "scope", "value": "order:read order:write"}
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8083/oauth2/token",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["oauth2", "token"]
+            },
+            "description": "使用 Basic Auth: order-service / order-service-secret"
+          }
+        },
+        {
+          "name": "Client Credentials - user-service",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic dXNlci1zZXJ2aWNlOnVzZXItc2VydmljZS1zZWNyZXQ="
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {"key": "grant_type", "value": "client_credentials"},
+                {"key": "scope", "value": "user:read user:write"}
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8083/oauth2/token",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["oauth2", "token"]
+            },
+            "description": "使用 Basic Auth: user-service / user-service-secret"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Token 管理",
+      "item": [
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {"key": "grant_type", "value": "refresh_token"},
+                {"key": "refresh_token", "value": "{{refresh_token}}"},
+                {"key": "client_id", "value": "web-app-client"}
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8083/oauth2/token",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["oauth2", "token"]
+            }
+          }
+        },
+        {
+          "name": "Revoke Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {"key": "token", "value": "{{access_token}}"},
+                {"key": "token_type_hint", "value": "access_token"}
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8083/oauth2/revoke",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["oauth2", "revoke"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. 用户信息",
+      "item": [
+        {
+          "name": "Get UserInfo (OIDC)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8083/userinfo",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["userinfo"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8083/api/user/me",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["api", "user", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. OIDC 发现端点",
+      "item": [
+        {
+          "name": "OIDC Configuration",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8083/.well-known/openid-configuration",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": [".well-known", "openid-configuration"]
+            }
+          }
+        },
+        {
+          "name": "JWK Set",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8083/oauth2/jwks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["oauth2", "jwks"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. 监控端点",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8083/actuator/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["actuator", "health"]
+            }
+          }
+        },
+        {
+          "name": "Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8083/actuator/metrics",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["actuator", "metrics"]
+            }
+          }
+        },
+        {
+          "name": "Prometheus Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8083/actuator/prometheus",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8083",
+              "path": ["actuator", "prometheus"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
+    },
+    {
+      "key": "authorization_code",
+      "value": ""
+    },
+    {
+      "key": "code_verifier",
+      "value": "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
+    },
+    {
+      "key": "code_challenge",
+      "value": "E9Melhoa2OwvFrEMTfgCH8tAZJzTL5nmSR8w2Nh8UIs"
+    }
+  ]
+}
