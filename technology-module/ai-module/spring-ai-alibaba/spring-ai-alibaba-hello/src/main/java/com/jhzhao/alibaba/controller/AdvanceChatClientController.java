@@ -8,6 +8,7 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.MimeTypeUtils;
@@ -26,7 +27,7 @@ public class AdvanceChatClientController {
 
     private final ChatClient chatClient;
 
-    public AdvanceChatClientController(ChatModel chatModel) {
+    public AdvanceChatClientController(@Qualifier("openAiChatModel") ChatModel chatModel) {
         this.chatClient = ChatClient.builder(chatModel)
                 .defaultAdvisors(new SimpleLoggerAdvisor())
                 .defaultOptions(

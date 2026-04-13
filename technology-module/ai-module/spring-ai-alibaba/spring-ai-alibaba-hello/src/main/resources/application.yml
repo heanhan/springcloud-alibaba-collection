@@ -5,7 +5,9 @@ spring:
     name: spring-ai-alibaba-hello
   #配置 大模型地址
   ai:
-    ollama:
-      base-url: http://localhost:11434
+    openai:
+      base-url: http://192.168.101.68:8000
+      api-key: qwertyuiop
       chat:
-        model: qwen3:8b
+        options:
+          model: Qwen3-Coder-30B-A3B-Instruct-5bit

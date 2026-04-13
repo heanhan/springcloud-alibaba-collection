@@ -104,20 +104,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>com.alibaba.cloud.ai</groupId>
-            <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.cloud.ai</groupId>
-            <artifactId>spring-ai-alibaba-starter-agentscope</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.cloud.ai</groupId>
-            <artifactId>spring-ai-alibaba-studio</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

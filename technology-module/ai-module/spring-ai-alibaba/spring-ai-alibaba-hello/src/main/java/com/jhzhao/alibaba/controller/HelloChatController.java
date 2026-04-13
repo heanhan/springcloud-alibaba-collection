@@ -29,7 +29,9 @@ public class HelloChatController {
 
     private static final String DEFAULT_PROMPT = "你是一个博学的智能聊天助手，请根据用户提问回答！";
 
-    private ChatClient client;
+    private final ChatClient client;
+
+
 
 //    ChatModel vs ChatClient
 //    ChatModel：底层API，直接与模型交互，提供最大控制权
